@@ -6,4 +6,3 @@ OUTPUT_FILE=maze.txt
 PERFECT=False
 COLOR_WALL=(33, 33, 222)
 COLOR_FOND=(0, 0, 0)
-

@@ -13,20 +13,28 @@ class render():
         self.hauteur_fenetre = 0
         self.new_maze(1)
         self.size_cel = self.cell_and_windows_size(self.mazze)
-        self.ecran = pygame.display.set_mode((self.largeur_fenetre, self.hauteur_hud + self.hauteur_fenetre))
-        self.fenetre = self.ecran.subsurface((0, self.hauteur_hud, self.largeur_fenetre, self.hauteur_fenetre))
-        self.police = pygame.font.Font(None,25)
+        self.ecran = pygame.display.set_mode(
+            (self.largeur_fenetre, self.hauteur_hud + self.hauteur_fenetre))
+        self.fenetre = self.ecran.subsurface(
+            (0, self.hauteur_hud, self.largeur_fenetre, self.hauteur_fenetre))
+        self.police = pygame.font.Font(None, 25)
 
     def draw_hud(self, play, rest_time):
-        self.ecran.fill(self.color_fond, (0,0,self.largeur_fenetre,self.hauteur_hud))
-        image = self.police.render("Vies : " + str(play.vies), True, (255,255,255))
-        self.ecran.blit(image, (10,10))
-        image = self.police.render("Score : " + str(play.score), True, (255,255,255))
-        self.ecran.blit(image, (112,10))
-        image = self.police.render("Niveau : " + str(play.level), True, (255,255,255))
-        self.ecran.blit(image, (225,10))
-        image = self.police.render("Temps : " + str(rest_time), True, (255,255,255))
-        self.ecran.blit(image, (340,10))
+        self.ecran.fill(self.color_fond,
+                        (0, 0, self.largeur_fenetre, self.hauteur_hud))
+        image = self.police.render(
+            "Vies : " + str(play.vies), True, (255, 255, 255))
+        self.ecran.blit(image, (10, 10))
+        image = self.police.render(
+            "Score : " + str(play.score), True, (255, 255, 255))
+        self.ecran.blit(image, (112, 10))
+        image = self.police.render(
+            "Niveau : " + str(play.level), True, (255, 255, 255))
+        self.ecran.blit(image, (225, 10))
+        image = self.police.render(
+            "Temps : " + str(rest_time), True, (255, 255, 255))
+        self.ecran.blit(image, (340, 10))
+
     def extract_config(self):
         with open("config.txt", "r", encoding="utf-8") as f:
             for line in f:
@@ -37,7 +45,7 @@ class render():
                 self.config[key.strip()] = values.strip()
 
     def extract_color(self, color: tuple) -> list[int]:
-        new = []      
+        new = []
         color = color.strip("(")
         color = color.strip(")")
         new = color.split(",")
@@ -89,7 +97,7 @@ class render():
             "sud": (0, c - w, c, w),
             "est": (c - w, 0, w, c),
             "ouest": (0, 0, w, c),
-            }
+        }
 
     def draw(self, fenetre, x, y, largeur, hauteur, couleur):
         for dy in range(hauteur):
@@ -107,7 +115,8 @@ class render():
             for col in range(len(self.mazze[row])):
                 x, y, direction = self.cell_to_pixel((row, col))
                 if self.mazze[row][col] == 15:
-                    self.draw(self.fenetre, x, y, self.size_cel, self.size_cel, self.color_wall)
+                    self.draw(self.fenetre, x, y, self.size_cel,
+                              self.size_cel, self.color_wall)
                     continue
                 for key, valus in direction.items():
                     if valus is True:
@@ -122,10 +131,9 @@ class render():
         maze = mazegenerator.MazeGenerator()
         if level == 1:
             maze.generate(42)
-        maze.generate(0)
+        else:
+            maze.generate(0)
         self.mazze = maze.maze
-
-            
 
 
 class Player():
@@ -145,13 +153,14 @@ class Player():
         self.pacman_bouche_fermer = pygame.image.load("pacman_fermer.png")
         self.pacman_bouche_fermer = pygame.transform.scale(
             self.pacman_bouche_fermer, (self.cel_size / 2, self.cel_size / 2))
-        self.pacman_bouche_semiouvert = pygame.image.load("pacman_semi_ouvert.png")
+        self.pacman_bouche_semiouvert = pygame.image.load(
+            "pacman_semi_ouvert.png")
         self.pacman_bouche_semiouvert = pygame.transform.scale(
             self.pacman_bouche_semiouvert, (self.cel_size / 2, self.cel_size / 2))
         self.pacman_bouche_ouvert = pygame.image.load("pacman_ouvert.png")
         self.pacman_bouche_ouvert = pygame.transform.scale(
-                    self.pacman_bouche_ouvert, (self.cel_size / 2,
-                                                self.cel_size / 2))
+            self.pacman_bouche_ouvert, (self.cel_size / 2,
+                                        self.cel_size / 2))
         self.list_position = [self.pacman_bouche_semiouvert,
                               self.pacman_bouche_semiouvert,
                               self.pacman_bouche_fermer,
@@ -172,8 +181,8 @@ class Player():
         self.lis_superpacgums = []
         self.nombre_pacgums_manger = 0
         super_pacgums = pygame.image.load("pacgums.png")
-        self.ubuntu_logo = pygame.transform.scale(super_pacgums, 
-                                                  (self.size_super, 
+        self.ubuntu_logo = pygame.transform.scale(super_pacgums,
+                                                  (self.size_super,
                                                    self.size_super))
 
     def at_center(self):
@@ -202,7 +211,7 @@ class Player():
         if list["est"] is False and self.direction == "est":
             return True
         return False
- 
+
     def rotate(self):
         if self.direction == "sud":
             image = pygame.transform.rotate(next(self.cycle), 270)
@@ -250,13 +259,13 @@ class Player():
         self.lis_superpacgums.append((0, 0))
         self.lis_superpacgums.append((0, tailley))
         self.lis_superpacgums.append((taillex, 0))
-        self.lis_superpacgums.append((taillex, tailley))     
+        self.lis_superpacgums.append((taillex, tailley))
 
     def afficher_superpacgums(self, fenetre):
         for row, col in self.lis_superpacgums:
             x = col * self.cel_size
             y = row * self.cel_size
-            self.decalge = (self.cel_size - self.size_super) / 2 
+            self.decalge = (self.cel_size - self.size_super) / 2
             fenetre.blit(self.ubuntu_logo,
                          (x + self.decalge, y + self.decalge))
 
@@ -271,17 +280,18 @@ class Player():
     def place_pacgums(self, fenetre, nombre, mazze):
         tailley = len(mazze[0])
         taillex = len(mazze)
-        
+
         while len(self.lis_pacgums) < nombre:
             row = random.randint(0, taillex - 1)
             col = random.randint(0, tailley - 1)
-            self.ajoute_pacgums(fenetre, mazze, (row, col), (col * self.cel_size, row * self.cel_size))
-    
+            self.ajoute_pacgums(fenetre, mazze, (row, col),
+                                (col * self.cel_size, row * self.cel_size))
+
     def afficher_pacgums(self, fenetre):
         for row, col in self.lis_pacgums:
             x = col * self.cel_size
             y = row * self.cel_size
-            self.decalge = (self.cel_size - self.size_pacgums) / 2 
+            self.decalge = (self.cel_size - self.size_pacgums) / 2
             fenetre.blit(self.pacgums, (x + self.decalge, y + self.decalge))
 
     def sup_pacgums(self) -> bool:
@@ -311,10 +321,11 @@ class Phantom():
         self.base_col = col
         self.cel_size = cel_size
 
-        self.phantom_scare = pygame.transform.scale(self.phantom_scare, (self.cel_size // 2, self.cel_size // 2))
-        self.phantom = pygame.transform.scale(image, (self.cel_size // 2, 
+        self.phantom_scare = pygame.transform.scale(
+            self.phantom_scare, (self.cel_size // 2, self.cel_size // 2))
+        self.phantom = pygame.transform.scale(image, (self.cel_size // 2,
                                                       self.cel_size // 2))
-        self.decalage = (self.cel_size - self.cel_size / 2) / 2 
+        self.decalage = (self.cel_size - self.cel_size / 2) / 2
         self.direction = "est"
         self.restart = False
 
@@ -323,7 +334,7 @@ class Phantom():
             return False
         drow = self.row - joueur.row
         dcol = self.col - joueur.col
-        if drow**2 + dcol**2 < 0.5**2 :
+        if drow**2 + dcol**2 < 0.5**2:
             return True
         return False
 
@@ -339,7 +350,8 @@ class Phantom():
                 fenetre.blit(self.phantom, (x, y))
 
     def fuir(self, mazze, row, col, check_bits):
-        neighbors = self.get_neighbors(mazze, round(self.row), round(self.col), check_bits)
+        neighbors = self.get_neighbors(mazze, round(
+            self.row), round(self.col), check_bits)
         meilleur_distance = -1
         meilleur_voisin = None
         for (nrow, ncol) in neighbors:
@@ -347,14 +359,14 @@ class Phantom():
             dcol = ncol - col
             distance = drow**2 + dcol**2
             if distance > meilleur_distance:
-                meilleur_distance =  distance
+                meilleur_distance = distance
                 meilleur_voisin = (nrow, ncol)
         if meilleur_voisin is None:
             self.direction = None
-        else :
+        else:
             prochain_row, prochain_col = meilleur_voisin
             self.conversion_direction(prochain_row, prochain_col)
-    
+
     def update(self, mazze, row, col, check_bits):
         if self.eat:
             return
@@ -365,9 +377,9 @@ class Phantom():
                 self.fuir(mazze, row, col, check_bits)
             else:
                 chemin = self.bfs(mazze, row, col, check_bits)
-                if len(chemin) > 1 :
+                if len(chemin) > 1:
                     self.deplace_vers_joueur(chemin)
-                else :
+                else:
                     self.direction = None
         self.deplacement()
 
@@ -380,10 +392,11 @@ class Phantom():
             self.direction = "est"
         elif prochain_col < self.col:
             self.direction = "ouest"
+
     def at_center(self):
         return (abs(self.row - round(self.row)) < 0.001 and
                 abs(self.col - round(self.col)) < 0.001)
-    
+
     def deplace_vers_joueur(self, chemin):
         prochain_row, prochain_col = chemin[1]
         self.conversion_direction(prochain_row, prochain_col)
@@ -408,15 +421,15 @@ class Phantom():
             "sud": (1, 0),
             "est": (0, 1),
             "ouest": (0, -1),
-            }
+        }
         voisins = []
         for (direction, (dx, dy)) in deplacements.items():
             if not murs[direction]:
                 nx, ny = x + dx, y + dy
-                if 0 <= nx < len(mazze) and 0 <= ny < len(mazze[0]) :
+                if 0 <= nx < len(mazze) and 0 <= ny < len(mazze[0]):
                     voisins.append((nx, ny))
         return voisins
-    
+
     def bfs(self, mazze, pacman_row, pacman_col, check_bits):
         queu = []
         dejavisit = []
@@ -449,6 +462,7 @@ class Phantom():
 
         return chemin
 
+
 def reset_pos(list_fantomes):
     for phanto in list_fantomes:
         phanto.row = phanto.base_row
@@ -457,29 +471,97 @@ def reset_pos(list_fantomes):
     play.row = play.base_row
     play.col = play.base_col
 
+
 if __name__ == "__main__":
-    state: str = "jeu"
+    state: str = "menu"
     level_max_time = 90
     vitesse_fantomes = 0.04
+    nb_pacgums = 207
+    niveau_max = 10
     pygame.init()
     re = render()
-    re.extract_config()
-    Maze = mazegenerator.MazeGenerator()
-    Maze.generate()
 
     play = Player(re.size_cel, (len(re.mazze) // 2), len(re.mazze[0]) // 2,
                   "est")
-    phantom1 = Phantom(0, 0, re.size_cel, pygame.image.load("image_phantom/1.png"), vitesse_fantomes)
-    phantom2 = Phantom(0, len(re.mazze[0]) - 1, re.size_cel, pygame.image.load("image_phantom/2.png"), vitesse_fantomes)
-    phantom3 = Phantom(len(re.mazze) - 1, 0, re.size_cel, pygame.image.load("image_phantom/3.png"), vitesse_fantomes)
-    phantom4 = Phantom(len(re.mazze) - 1, len(re.mazze[0]) - 1, re.size_cel, pygame.image.load("image_phantom/4.png"),vitesse_fantomes)
+    phantom1 = Phantom(0, 0, re.size_cel, pygame.image.load(
+        "image_phantom/1.png"), vitesse_fantomes)
+    phantom2 = Phantom(0, len(re.mazze[0]) - 1, re.size_cel,
+                       pygame.image.load("image_phantom/2.png"), vitesse_fantomes)
+    phantom3 = Phantom(len(re.mazze) - 1, 0, re.size_cel,
+                       pygame.image.load("image_phantom/3.png"), vitesse_fantomes)
+    phantom4 = Phantom(len(re.mazze) - 1, len(re.mazze[0]) - 1, re.size_cel, pygame.image.load(
+        "image_phantom/4.png"), vitesse_fantomes)
     list_fantomes = [phantom1, phantom2, phantom3, phantom4]
-    play.place_pacgums(re.fenetre, 1, re.mazze)
+    play.place_pacgums(re.fenetre, nb_pacgums, re.mazze)
     play.ajoute_super(re.mazze)
     continuer = True
     clock = pygame.time.Clock()
     start = pygame.time.get_ticks()
+    choix = 0
+    police_titre = pygame.font.Font(None, 80)
+    lignes_instructions = [
+        "Fleches : deplacer Pac-Man",
+        "Echap : pause",
+        "Mange toutes les pacgums pour passer au niveau suivant",
+        "Pacgum : 10 points",
+        "Super pacgum : 50 points, fantomes vulnerables",
+        "Fantome mange : 200 points",
+        "Touche par un fantome : tu perds une vie",
+        "90 secondes par niveau, 10 niveaux au total",
+        "Echap : retour au menu",
+    ]
+
     while continuer:
+        options = ["Start", "Highscores", "Instructions", "Exit"]
+        if state == "menu":
+            clock.tick(30)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    continuer = False
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_UP:
+                        choix = (choix - 1) % len(options)
+                    elif event.key == pygame.K_DOWN:
+                        choix = (choix + 1) % len(options)
+                    elif event.key == pygame.K_RETURN:
+                        if choix == 0:
+                            state = "jeu"
+                            start = pygame.time.get_ticks()
+                        elif choix == 2:
+                            state = "instructions"
+                        elif choix == 3:
+                            continuer = False
+            re.ecran.fill((0, 0, 0))
+            titre = police_titre.render("Pac-Man", True, (255, 255, 0))
+            x = (re.largeur_fenetre - titre.get_width()) // 2
+            re.ecran.blit(titre, (x, 40))
+
+            for i, texte in enumerate(options):
+                if i == choix:
+                    couleur = (255, 255, 0)
+                else:
+                    couleur = (255, 255, 255)
+                image = re.police.render(texte, True, couleur)
+                x = (re.largeur_fenetre - image.get_width()) // 2
+                re.ecran.blit(image, (x, 150 + i * 50))
+            pygame.display.flip()
+            
+        if state == "instructions":
+            clock.tick(30)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    continuer = False
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        state = "menu"
+            re.ecran.fill((0, 0, 0))
+            for i, ligne in enumerate(lignes_instructions):
+                image = re.police.render(ligne, True, (255, 255, 255))
+                x = (re.largeur_fenetre - image.get_width()) // 2
+                re.ecran.blit(image, (x, 80 + i * 40))
+            pygame.display.flip()
+
+
         if state == "jeu":
             clock.tick(30)
             ec_time = pygame.time.get_ticks() - start
@@ -494,7 +576,8 @@ if __name__ == "__main__":
                     continuer = False
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
-                        continuer = False
+                        state = "pause"
+                        debut_pause = pygame.time.get_ticks()
                     if event.key == pygame.K_UP or event.key == pygame.K_DOWN or\
                             event.key == pygame.K_LEFT or\
                             event.key == pygame.K_RIGHT:
@@ -505,24 +588,25 @@ if __name__ == "__main__":
             play.afficher_superpacgums(re.fenetre)
             for phanto in list_fantomes:
                 phanto.draw_phantom(re.fenetre)
-                phanto.update(re.mazze, round(play.row), round(play.col), re.check_bits)
+                phanto.update(re.mazze, round(play.row),
+                              round(play.col), re.check_bits)
             vul = play.sup_pacgums()
             if len(play.lis_pacgums) == 0:
-                niveau_max = 10
                 play.level += 1
                 if play.level > niveau_max:
-                    continuer = False
-                re.new_maze(play.level)
-                reset_pos(list_fantomes)
-                play.lis_pacgums.clear()
-                play.lis_superpacgums.clear()
-                play.place_pacgums(re.fenetre, 207, re.mazze)
-                play.ajoute_super(re.mazze)
-                start = pygame.time.get_ticks()
+                    state = "victoire"
+                else:
+                    re.new_maze(play.level)
+                    reset_pos(list_fantomes)
+                    play.lis_pacgums.clear()
+                    play.lis_superpacgums.clear()
+                    play.place_pacgums(re.fenetre, nb_pacgums, re.mazze)
+                    play.ajoute_super(re.mazze)
+                    start = pygame.time.get_ticks()
             for fantome in list_fantomes:
                 if fantome.eat and pygame.time.get_ticks() >= fantome.end_eat:
                     fantome.eat = False
-            
+
             if vul:
                 for fantome in list_fantomes:
                     fantome.vulnerable = True
@@ -550,8 +634,53 @@ if __name__ == "__main__":
                         reset_pos(list_fantomes)
                         break
             if play.vies == 0:
-                continuer = False
+                state = "game_over"
+        if state == "victoire":
+            clock.tick(30)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    continuer = False
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        continuer = False
+            re.ecran.fill((0, 0, 0))
+            victory = re.police.render("VICTOIRE !", True, (255, 255, 255))
+            scr = re.police.render(
+                ("Score : " + str(play.score)), True, (255, 255, 255))
+            x = (re.largeur_fenetre - victory.get_width()) // 2
+            re.ecran.blit(victory, (x, 200))
+            re.ecran.blit(scr, (x, 250))
+            pygame.display.flip()
+        if state == "pause":
+            clock.tick(30)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    continuer = False
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        state = "jeu"
+                        start += (pygame.time.get_ticks() - debut_pause)
+            re.ecran.fill((0, 0, 0))
+            pause = re.police.render("PAUSE", True, (255, 255, 255))
+            x = (re.largeur_fenetre - pause.get_width()) // 2
+            re.ecran.blit(pause, (x, 250))
+            pygame.display.flip()
+            
+
         if state == "game_over":
-            #afficher ecran de fin
-            break
+            clock.tick(30)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    continuer = False
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        continuer = False
+            re.ecran.fill((0, 0, 0))
+            go = re.police.render("GAME OVER", True, (255, 255, 255))
+            scr = re.police.render(
+                ("Score : " + str(play.score)), True, (255, 255, 255))
+            x = (re.largeur_fenetre - go.get_width()) // 2
+            re.ecran.blit(go, (x, 150))
+            re.ecran.blit(scr, (x, 250))
+            pygame.display.flip()
     pygame.quit()
