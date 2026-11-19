@@ -1,12 +1,52 @@
+# Pac-Man configuration (JSON with comments).
+# Lines starting with '#' (or '//') are ignored.
+# Every key is optional: a missing or invalid value falls back to a safe
+# default and a message is printed. Unknown keys are ignored.
 {
-    "width": 1500,
-    "height": 600,
-    "entry": "(0, 0)",
-    "output_file": "maze.txt",
-    "perfect": false,
-    "color_wall": "(33, 33, 222)",
-    "color_fond": "(0, 0, 0)",
-    "high_score_filename": "highscores.txt",
-    "point_per_pacgum": 10,
-    "nombre_de_pacgums": 207
+    # File where the top 10 scores are stored (relative to this file).
+    "highscore_filename": "highscores.json",
+
+    # Player and rules.
+    "lives": 3,
+    "pacgum": 200,
+    "points_per_pacgum": 10,
+    "points_per_super_pacgum": 50,
+    "points_per_ghost": 200,
+
+    # Seed of the first maze (0 = random). Other levels are always random.
+    "seed": 42,
+
+    # Time limit of each level, in seconds.
+    "level_max_time": 90,
+
+    # One entry per level (at least 10), size of the maze in cells.
+    "levels": [
+        {"width": 15, "height": 15},
+        {"width": 15, "height": 15},
+        {"width": 15, "height": 15},
+        {"width": 16, "height": 16},
+        {"width": 16, "height": 16},
+        {"width": 17, "height": 17},
+        {"width": 17, "height": 17},
+        {"width": 18, "height": 18},
+        {"width": 19, "height": 19},
+        {"width": 20, "height": 20}
+    ],
+
+    # Maximum size of the window, in pixels.
+    "window_width": 1500,
+    "window_height": 700,
+
+    # Speeds, in cells per frame (30 frames per second).
+    "player_speed": 0.05,
+    "player_cheat_speed": 0.1,
+    "ghost_speed": 0.04,
+
+    # Durations in milliseconds.
+    "vulnerable_duration_ms": 6000,
+    "ghost_respawn_ms": 5000,
+
+    # Colors as [red, green, blue].
+    "wall_color": [33, 33, 222],
+    "background_color": [0, 0, 0]
 }

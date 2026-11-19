@@ -1,0 +1,10 @@
+[flake8]
+# mazegenerator is the assigned A-Maze-ing package: used as-is, not linted.
+exclude =
+    .git,
+    __pycache__,
+    .venv,
+    venv,
+    build,
+    dist,
+    mazegenerator

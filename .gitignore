@@ -1,0 +1,22 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+.mypy_cache/
+.pytest_cache/
+.venv/
+venv/
+*.egg-info/
+
+# Packaging output
+build/
+dist/
+
+# Game data generated at runtime
+highscores.json
+highscores.json.tmp
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
