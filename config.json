@@ -1,0 +1,12 @@
+{
+    "width": 1500,
+    "height": 600,
+    "entry": "(0, 0)",
+    "output_file": "maze.txt",
+    "perfect": false,
+    "color_wall": "(33, 33, 222)",
+    "color_fond": "(0, 0, 0)",
+    "high_score_filename": "highscores.txt",
+    "point_per_pacgum": 10,
+    "nombre_de_pacgums": 207
+}
