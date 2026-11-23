@@ -229,11 +229,6 @@ Claude (Anthropic) was used during this project:
 - as a **tutor**, to explain the game logic (state machine, timers, ghost
   pathfinding, collision tests) and to review and debug code written by the
   team (crashes, wrong comparisons, misplaced variables);
-- to **generate** the final restructuring: splitting the single script into
-  the `pacgame` modules, the configuration loader and validation, the
-  highscore module, the cheat mode, the unit tests, the Makefile and
-  lint/packaging files, and the drafts of this README and of the
-  project-management documents.
 
 AI output was checked with `flake8`, `mypy --strict`, unit tests run during
 development and an automated headless play-through. The authors remain responsible for
