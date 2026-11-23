@@ -1,6 +1,7 @@
 # Acceptance test plan
 
-"Auto" = covered by `make test` (24 unit tests) or by the scripted headless
+"Auto" = covered by unit tests run during development (configuration, highscores,
+maze helpers, movement, game rules and cheats; not part of the delivery) or by the scripted headless
 play-through that drives the real `Game` with simulated key presses
 (menu, instructions, highscores, play, pause, cheats, 10 levels, victory,
 name entry, highscore saved). Last automatic run: 2026-11-19, all passing.

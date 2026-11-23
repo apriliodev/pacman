@@ -1,0 +1,42 @@
+PAC-MAN - HOW TO PLAY
+=====================
+
+Start the game
+  Double-click pac-man (or run it from a terminal). It reads config.json
+  located next to it. To use another file:  pac-man config.json
+
+Goal
+  Eat every pacgum (small dots) of the maze to clear the level. Clear all
+  the levels to win. Ghosts chase you: a contact costs one life. Eat a
+  super-pacgum (big dot in a corner) to make the ghosts edible for a few
+  seconds. Each level has a time limit.
+
+Controls
+  Arrows, W A S D or Z Q S D   move
+  Esc                          pause / resume (back in sub-screens)
+  Up / Down + Enter            navigate menus
+
+Cheat mode (for reviewers)
+  C   toggle the cheat mode (a red CHEAT label appears in the HUD)
+  Then:  I invincibility   F freeze ghosts   V faster player
+         L extra life      N skip the current level
+
+Options (config.json)
+  Lines starting with # are comments. Every key is optional; an invalid or
+  missing value falls back to a safe default and a message is printed.
+    highscore_filename        file of the top 10 scores
+    lives                     lives at the start (default 3)
+    pacgum                    pacgums per level
+    points_per_pacgum / points_per_super_pacgum / points_per_ghost
+    seed                      seed of level 1 (0 = random)
+    level_max_time            seconds per level
+    levels                    list of {"width", "height"}, at least 10
+    window_width / window_height, player_speed, player_cheat_speed,
+    ghost_speed, vulnerable_duration_ms, ghost_respawn_ms,
+    wall_color, background_color
+  See config.json for the full list with comments.
+
+Highscores
+  At the end of a game (win or lose) press Enter and type your name
+  (10 characters max: letters, digits, spaces). The top 10 is kept in the
+  highscore file and shown in the main menu.

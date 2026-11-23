@@ -76,13 +76,13 @@ Pressing `C` again turns the mode and all its effects off.
 | `make clean` | Remove `__pycache__`, `.mypy_cache`, `.pytest_cache`, build output |
 | `make lint` | `flake8 .` and `mypy .` with the mandatory flags |
 | `make lint-strict` | `flake8 .` and `mypy . --strict` |
-| `make test` | Run the unit tests (`pytest`) |
 | `make package` | Build the distributable with PyInstaller (`pac-man.spec`) |
 
 ### Packaging
 
-`make package` builds `dist/pac-man/` (executable, assets and a default
-`config.json`) from `pac-man.spec` and `packaging_launcher.py`. The folder
+`make package` builds `dist/pac-man/` (executable, assets, a default
+`config.json` and `PLAYING.txt`, the in-package controls/options/config
+instructions) from `pac-man.spec` and `packaging_launcher.py`. The folder
 is zipped and uploaded to itch.io as a private/unlisted build, for example
 with [butler](https://itch.io/docs/butler/):
 
@@ -193,7 +193,6 @@ pacgame/
   assets.py           image loading
 assets/               sprites
 mazegenerator/        assigned A-Maze-ing package
-tests/                pytest unit tests
 project-management/   planning, risks, tests, decisions
 ```
 
@@ -215,8 +214,7 @@ decisions.
 - [Python `json`](https://docs.python.org/3/library/json.html),
   [`dataclasses`](https://docs.python.org/3/library/dataclasses.html),
   [`typing`](https://docs.python.org/3/library/typing.html)
-- [flake8](https://flake8.pycqa.org/), [mypy](https://mypy.readthedocs.io/),
-  [pytest](https://docs.pytest.org/)
+- [flake8](https://flake8.pycqa.org/), [mypy](https://mypy.readthedocs.io/)
 - [PEP 8](https://peps.python.org/pep-0008/),
   [PEP 257](https://peps.python.org/pep-0257/)
 - [The Pac-Man Dossier](https://pacman.holenet.info/) (original ghost
@@ -237,6 +235,6 @@ Claude (Anthropic) was used during this project:
   lint/packaging files, and the drafts of this README and of the
   project-management documents.
 
-AI output was checked with `flake8`, `mypy --strict`, the unit tests and an
-automated headless play-through. The authors remain responsible for
+AI output was checked with `flake8`, `mypy --strict`, unit tests run during
+development and an automated headless play-through. The authors remain responsible for
 understanding and being able to explain every part of the code.

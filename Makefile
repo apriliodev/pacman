@@ -1,7 +1,7 @@
 PYTHON ?= python3
 CONFIG ?= config.json
 
-.PHONY: install run debug clean lint lint-strict test package
+.PHONY: install run debug clean lint lint-strict package
 
 install:
 	$(PYTHON) -m pip install -r requirements-dev.txt
@@ -28,8 +28,6 @@ lint-strict:
 	$(PYTHON) -m flake8 .
 	$(PYTHON) -m mypy . --strict
 
-test:
-	$(PYTHON) -m pytest
-
 package:
 	$(PYTHON) -m PyInstaller --noconfirm pac-man.spec
+	cp config.json PLAYING.txt dist/pac-man/
