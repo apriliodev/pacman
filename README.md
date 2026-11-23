@@ -229,7 +229,3 @@ Claude (Anthropic) was used during this project:
 - as a **tutor**, to explain the game logic (state machine, timers, ghost
   pathfinding, collision tests) and to review and debug code written by the
   team (crashes, wrong comparisons, misplaced variables);
-
-AI output was checked with `flake8`, `mypy --strict`, unit tests run during
-development and an automated headless play-through. The authors remain responsible for
-understanding and being able to explain every part of the code.
