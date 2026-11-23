@@ -6,7 +6,7 @@ Dates come from the git history of the repository.
 |---|---|
 | 2026-10-16 | First commit: first playable version (maze, player, ghosts) |
 | 2026-11-03 | Lives, score, HUD, level timer, level progression, game over / victory states, menu |
-| 2026-11-19 | Finishing phase: menus, instructions, highscores, pause menu, cheat mode, configuration, modular architecture, tooling, tests, packaging |
+| 2026-11-19 | Finishing phase: menus, instructions, highscores, pause menu, cheat mode, configuration, modular architecture, tooling (uv, flake8, mypy), tests |
 
 ## Plan versus reality
 
@@ -20,8 +20,8 @@ Dates come from the git history of the repository.
 | 6. Cheat mode | Invincibility, level skip, ghost freeze, extra life, speed | Done |
 | 7. Quality | flake8, mypy (`--strict` passes), type hints, docstrings, unit tests | Done |
 | 8. Delivery files | Makefile, `.gitignore`, README, this directory | Done |
-| 9. Packaging | PyInstaller spec builds and starts; **upload to itch.io/Steam** | Build done, **upload TO DO** |
+| 9. Distribution | Python source zip run with uv (no executable); **upload to itch.io/Steam** | Run command tested, **upload TO DO** |
 | 10. Bonus | Different ghost behaviors (chaser, follower, random, runaway) | Not started |
 
 **TO COMPLETE:** planned dates per phase and the actual dates of the
-packaging/upload step.
+upload step.

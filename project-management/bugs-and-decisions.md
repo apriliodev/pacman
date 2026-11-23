@@ -27,6 +27,7 @@
 | Game time counter instead of wall-clock time | Pausing freezes every timer for free |
 | Highscores in a JSON file next to the config | Simple, readable, dependency-free; matches the subject's suggestion |
 | Pre-rendered maze surface | Walls are drawn once per level instead of pixel by pixel every frame |
+| uv (`pyproject.toml`, `uv.lock`) for dependencies; game distributed as Python source, no executable | Reproducible environment, one command to install and run; no per-OS build to maintain |
 | English UI texts and identifiers | Matches the subject's menu names and the English README |
 
 ## Blocking points and conflicts

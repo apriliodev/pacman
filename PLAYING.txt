@@ -2,8 +2,12 @@ PAC-MAN - HOW TO PLAY
 =====================
 
 Start the game
-  Double-click pac-man (or run it from a terminal). It reads config.json
-  located next to it. To use another file:  pac-man config.json
+  Install uv (https://docs.astral.sh/uv/), then in this folder:
+    uv sync
+    uv run python pac-man.py config.json
+  (Without uv: Python 3.10+, "pip install pygame", then
+   python3 pac-man.py config.json)
+  config.json is the configuration file (see "Options" below).
 
 Goal
   Eat every pacgum (small dots) of the maze to clear the level. Clear all

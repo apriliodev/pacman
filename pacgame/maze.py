@@ -1,8 +1,8 @@
-"""Maze helpers: generator wrapper, wall decoding and path finding.
+"""Maze helpers: wrapper around the generator, walls, path finding.
 
-A maze is a list of rows of integers. Each integer encodes the walls of a
-cell: north=1, east=2, south=4, west=8. The value 15 is a fully closed cell
-(a piece of the "42" pattern).
+A maze is a list of rows of ints. Each int gives the walls of one cell:
+north=1, east=2, south=4, west=8. 15 means the cell is fully closed (it is
+part of the "42" drawing).
 """
 
 from collections import deque
@@ -33,18 +33,18 @@ class MazeError(Exception):
 
 
 def generate_maze(width: int, height: int, seed: int) -> Maze:
-    """Generate a Pac-Man compatible maze with the A-Maze-ing package.
+    """Ask the A-Maze-ing package for a maze (PERFECT is always False).
 
     Args:
-        width: Number of columns.
-        height: Number of rows.
-        seed: A positive seed gives a reproducible maze, 0 a random one.
+        width: number of columns.
+        height: number of rows.
+        seed: above 0 always gives the same maze, 0 gives a random one.
 
     Returns:
-        The maze grid (``height`` rows of ``width`` cells).
+        the grid, `height` rows of `width` cells.
 
     Raises:
-        MazeError: If the generator fails or returns an unusable maze.
+        MazeError: if the generator fails or the maze is unusable.
     """
     try:
         generator = mazegenerator.MazeGenerator(
@@ -58,28 +58,28 @@ def generate_maze(width: int, height: int, seed: int) -> Maze:
 
 
 def walls(maze: Maze, cell: Cell) -> dict[str, bool]:
-    """Decode the walls of a cell.
+    """Tell which sides of a cell have a wall.
 
     Args:
-        maze: The maze grid.
-        cell: A ``(row, column)`` position.
+        maze: the maze grid.
+        cell: (row, column).
 
     Returns:
-        For each direction, True if there is a wall on that side.
+        for each direction, True if there is a wall.
     """
     value = maze[cell[0]][cell[1]]
     return {name: bool(value & bit) for name, bit in WALL_BITS.items()}
 
 
 def neighbors(maze: Maze, cell: Cell) -> list[Cell]:
-    """Return the cells reachable from ``cell`` in one move.
+    """Cells we can walk to from this cell in one move.
 
     Args:
-        maze: The maze grid.
-        cell: A ``(row, column)`` position.
+        maze: the maze grid.
+        cell: (row, column).
 
     Returns:
-        The adjacent cells that are not separated from ``cell`` by a wall.
+        the adjacent cells with no wall in between.
     """
     row, col = cell
     if not (0 <= row < len(maze) and 0 <= col < len(maze[0])):
@@ -95,16 +95,15 @@ def neighbors(maze: Maze, cell: Cell) -> list[Cell]:
 
 
 def find_path(maze: Maze, start: Cell, goal: Cell) -> list[Cell]:
-    """Find the shortest path between two cells (breadth-first search).
+    """Shortest path between two cells (BFS).
 
     Args:
-        maze: The maze grid.
-        start: The starting ``(row, column)``.
-        goal: The target ``(row, column)``.
+        maze: the maze grid.
+        start: (row, column) where we start.
+        goal: (row, column) we want to reach.
 
     Returns:
-        The cells from ``start`` to ``goal`` included, or an empty list if
-        the goal cannot be reached.
+        the cells from start to goal included, empty list if there is no way.
     """
     parents: dict[Cell, Cell | None] = {start: None}
     queue: deque[Cell] = deque([start])
@@ -128,17 +127,17 @@ def find_path(maze: Maze, start: Cell, goal: Cell) -> list[Cell]:
 
 
 def nearest_free_cell(maze: Maze, cell: Cell) -> Cell:
-    """Return the free (not solid) cell closest to ``cell``.
+    """Closest cell that is not part of the "42" drawing.
 
     Args:
-        maze: The maze grid.
-        cell: The wanted ``(row, column)``.
+        maze: the maze grid.
+        cell: (row, column) we would like.
 
     Returns:
-        ``cell`` itself if it is free, otherwise the nearest free cell.
+        the cell itself if it is free, else the nearest free one.
 
     Raises:
-        MazeError: If the maze has no free cell at all.
+        MazeError: if there is no free cell at all.
     """
     best: Cell | None = None
     best_distance = 0

@@ -21,4 +21,4 @@ See [bugs-and-decisions.md](bugs-and-decisions.md) for the list of technical
 decisions and their reasons.
 
 **TO COMPLETE:** how the work was split, how disagreements were solved, who
-handled the packaging and the platform account.
+handled the distribution and the platform account.

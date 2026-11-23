@@ -1,4 +1,4 @@
-"""One level: its maze, start positions and remaining pellets."""
+"""One level: the maze, the start cells and the pellets left."""
 
 import random
 
@@ -6,15 +6,15 @@ from pacgame.maze import SOLID, Cell, Maze, nearest_free_cell
 
 
 class Level:
-    """A maze with the pacgums and super-pacgums that remain in it."""
+    """A maze plus the pacgums and super-pacgums still on it."""
 
     def __init__(self, maze: Maze, pacgum_count: int) -> None:
-        """Create a level.
+        """Build a level.
 
         Args:
-            maze: The maze grid.
-            pacgum_count: Wanted number of pacgums (limited by the free
-                cells available).
+            maze: the maze grid.
+            pacgum_count: how many pacgums we want (never more than the
+                free cells).
         """
         self.maze = maze
         self.rows = len(maze)
@@ -41,13 +41,13 @@ class Level:
         return set(random.sample(candidates, count))
 
     def eat(self, cell: Cell) -> str | None:
-        """Remove the pellet at ``cell``, if any.
+        """Eat what is on this cell, if anything.
 
         Args:
-            cell: The ``(row, column)`` where the player stands.
+            cell: (row, column) where the player is.
 
         Returns:
-            ``"pacgum"``, ``"super"`` or None if there was nothing to eat.
+            "pacgum", "super" or None if the cell was empty.
         """
         if cell in self.pacgums:
             self.pacgums.remove(cell)

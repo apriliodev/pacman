@@ -35,18 +35,18 @@ PLAYER_FRAMES = ("pacman_closed.png", "pacman_half_open.png",
 
 
 def step(value: float, delta: float) -> float:
-    """Move a coordinate by ``delta`` without ever passing a cell center.
+    """Move a coordinate by delta but never go past a cell center.
 
-    Cell centers are the integer coordinates. If the move reaches or crosses
-    the next one, the coordinate lands exactly on it, so entities can never
-    drift off the grid whatever their speed is.
+    Cell centers are the whole numbers. If the move reaches or passes the next
+    one, we stop exactly on it. That way nobody can drift out of the grid,
+    whatever the speed.
 
     Args:
-        value: The current coordinate.
-        delta: The signed distance to travel.
+        value: current coordinate.
+        delta: distance to travel (negative = other way).
 
     Returns:
-        The new coordinate.
+        the new coordinate.
     """
     new_value = value + delta
     if delta > 0:
@@ -65,36 +65,36 @@ def advance(row: float, col: float, direction: str,
     """Move a position one step in a direction.
 
     Args:
-        row: Current row coordinate.
-        col: Current column coordinate.
-        direction: One of ``north``, ``east``, ``south``, ``west``.
-        speed: Distance travelled, in cells.
+        row: current row.
+        col: current column.
+        direction: north, east, south or west.
+        speed: distance in cells.
 
     Returns:
-        The new ``(row, column)`` coordinates.
+        the new (row, column).
     """
     d_row, d_col = DELTAS[direction]
     return step(row, d_row * speed), step(col, d_col * speed)
 
 
 def at_center(row: float, col: float) -> bool:
-    """Tell whether a position is exactly on the center of a cell."""
+    """True if we are exactly on the center of a cell."""
     return (abs(row - round(row)) < CENTER_TOLERANCE
             and abs(col - round(col)) < CENTER_TOLERANCE)
 
 
 class Player:
-    """Pac-Man: moves in the maze and keeps the score and the lives."""
+    """Pac-Man: moves in the maze, keeps the score and the lives."""
 
     def __init__(self, start: Cell, cell_size: int, speed: float,
                  lives: int) -> None:
         """Create the player.
 
         Args:
-            start: Starting ``(row, column)``.
-            cell_size: Size of a cell in pixels.
-            speed: Distance travelled per frame, in cells.
-            lives: Number of lives at the start of the game.
+            start: (row, column) where it starts.
+            cell_size: size of a cell in pixels.
+            speed: cells per frame.
+            lives: lives at the start of the game.
         """
         self.start = start
         self.row = float(start[0])
@@ -141,10 +141,10 @@ class Player:
             self.next_direction = direction
 
     def update(self, maze: Maze) -> None:
-        """Move the player one frame.
+        """Move the player for one frame.
 
-        Turns are only taken at cell centers, but a U-turn is allowed at any
-        time. The player stops in front of a wall.
+        Turns only happen on cell centers, except U-turns which work anywhere.
+        The player stops in front of a wall.
         """
         if at_center(self.row, self.col):
             self.row = float(round(self.row))
@@ -175,10 +175,10 @@ class Ghost:
         """Create a ghost.
 
         Args:
-            start: Starting ``(row, column)`` (its corner).
-            image_name: Asset file name of its normal sprite.
-            cell_size: Size of a cell in pixels.
-            speed: Distance travelled per frame, in cells.
+            start: (row, column) of its corner.
+            image_name: file name of its sprite in assets/.
+            cell_size: size of a cell in pixels.
+            speed: cells per frame.
         """
         self.start = start
         self.row = float(start[0])
@@ -211,7 +211,7 @@ class Ghost:
         return round(self.row), round(self.col)
 
     def reset_position(self) -> None:
-        """Send the ghost back to its corner and clear its states."""
+        """Back to the corner, back to normal."""
         self.row = float(self.start[0])
         self.col = float(self.start[1])
         self.direction = None
@@ -225,7 +225,7 @@ class Ghost:
             self.vulnerable_until = until_ms
 
     def eat(self, until_ms: int) -> None:
-        """The ghost was eaten: it respawns in its corner at ``until_ms``."""
+        """Ghost eaten: back to its corner, it returns at until_ms."""
         self.eaten = True
         self.eaten_until = until_ms
         self.vulnerable = False
@@ -284,11 +284,11 @@ class Ghost:
             self.direction = None
 
     def update(self, maze: Maze, player_cell: Cell) -> None:
-        """Move the ghost one frame.
+        """Move the ghost for one frame.
 
         Args:
-            maze: The maze grid.
-            player_cell: The cell the player is in.
+            maze: the maze grid.
+            player_cell: cell the player is in.
         """
         if self.eaten:
             return

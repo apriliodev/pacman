@@ -1,9 +1,8 @@
-"""Configuration handling: JSON with comments, validation, safe defaults.
+"""Reads the config file (JSON with comments) and checks every value.
 
-The configuration file is a JSON document in which every line starting with
-``#`` (or ``//``) is a comment. Missing keys, wrong types and out-of-range
-values never raise: a clear message is written to stderr and a safe value is
-used instead. Unknown keys are ignored.
+Lines starting with # or // are comments. If a key is missing or wrong we
+print a message on stderr and use a default value, so the game never
+crashes because of the config. Unknown keys are just ignored.
 """
 
 import json
@@ -73,7 +72,7 @@ class GameConfig:
 
     @property
     def highscore_path(self) -> Path:
-        """Return the highscore file path (relative to the config file)."""
+        """Highscore file path, next to the config file."""
         return self.base_dir / self.highscore_filename
 
 
@@ -83,15 +82,16 @@ def _warn(message: str) -> None:
 
 
 def strip_comments(text: str) -> str:
-    """Blank out the comment lines of a JSON-with-comments document.
+    """Empty the comment lines so json can parse the text.
 
-    Lines are blanked (not removed) so JSON error positions stay correct.
+    The lines are emptied, not removed, so the line numbers in the JSON error
+    messages stay right.
 
     Args:
-        text: The raw content of the configuration file.
+        text: raw content of the config file.
 
     Returns:
-        The same text without its comment lines.
+        the same text without the comments.
     """
     lines = []
     for line in text.splitlines():
@@ -105,10 +105,10 @@ def strip_comments(text: str) -> str:
 
 def _read_int(data: dict[str, Any], key: str, default: int, low: int,
               high: int, label: str = "") -> int:
-    """Read an integer in ``[low, high]`` from ``data``.
+    """Get an int between low and high from data.
 
-    A missing key or a wrong type gives ``default``; an out-of-range value
-    is clamped. A message is printed in both cases.
+    Missing key: default (build_config prints one message for all of them).
+    Wrong type: default + message. Out of range: clamped + message.
     """
     name = label or key
     if key not in data:
@@ -128,7 +128,7 @@ def _read_int(data: dict[str, Any], key: str, default: int, low: int,
 
 def _read_float(data: dict[str, Any], key: str, default: float, low: float,
                 high: float) -> float:
-    """Read a finite number in ``[low, high]`` from ``data``."""
+    """Same as _read_int but for numbers with decimals."""
     if key not in data:
         return default
     value = data[key]
@@ -159,7 +159,7 @@ def _read_string(data: dict[str, Any], key: str, default: str) -> str:
 
 
 def _read_color(data: dict[str, Any], key: str, default: Color) -> Color:
-    """Read an ``[r, g, b]`` color (0-255 each) from ``data``."""
+    """Get an [r, g, b] color from data (0-255 each)."""
     if key not in data:
         return default
     value = data[key]
@@ -173,7 +173,7 @@ def _read_color(data: dict[str, Any], key: str, default: Color) -> Color:
 
 
 def _read_levels(data: dict[str, Any]) -> list[LevelConfig]:
-    """Read the ``levels`` array (at least ``MIN_LEVELS`` levels)."""
+    """Get the list of levels, 10 at least (we repeat the last one)."""
     raw = data.get("levels")
     if raw is None:
         return _default_levels()
@@ -204,15 +204,15 @@ def _read_levels(data: dict[str, Any]) -> list[LevelConfig]:
 
 def build_config(data: dict[str, Any], base_dir: Path,
                  report_missing: bool = True) -> GameConfig:
-    """Build a validated configuration from parsed JSON data.
+    """Build the config from the parsed JSON, checking every value.
 
     Args:
-        data: The parsed JSON object (unknown keys are ignored).
-        base_dir: Directory used to resolve the highscore file.
-        report_missing: Print one message listing the missing keys.
+        data: parsed JSON object (unknown keys are ignored).
+        base_dir: folder used for the highscore file.
+        report_missing: print one message with all the missing keys.
 
     Returns:
-        A configuration where every value is valid.
+        a GameConfig where every value is valid.
     """
     missing = [key for key in KNOWN_KEYS if key not in data]
     if missing and report_missing:
@@ -259,7 +259,7 @@ def build_config(data: dict[str, Any], base_dir: Path,
 
 
 def _read_json_file(path: Path) -> dict[str, Any]:
-    """Read a JSON-with-comments file; return ``{}`` on any error."""
+    """Read the file, give {} if anything goes wrong."""
     try:
         text = path.read_text(encoding="utf-8")
     except (OSError, ValueError) as exc:
@@ -279,13 +279,13 @@ def _read_json_file(path: Path) -> dict[str, Any]:
 
 
 def load_config(path: str) -> GameConfig:
-    """Load the configuration file; never raises.
+    """Load the config file. Never raises.
 
     Args:
-        path: Path of the JSON configuration file.
+        path: path of the JSON config file.
 
     Returns:
-        The validated configuration (defaults for anything invalid).
+        the config (defaults for everything invalid).
     """
     file_path = Path(path)
     base_dir = file_path.resolve().parent

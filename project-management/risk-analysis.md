@@ -8,6 +8,6 @@
 | 4 | Config changed during the defense ("the game configuration will be updated"). | Medium | High | Every value is validated and clamped; unknown keys ignored; levels, sizes and points are all configurable. |
 | 5 | Entities drifting off the grid (float movement) and walking through walls. | High | Low (fixed) | `step()` snaps to cell centers whatever the speed; tested with several speeds. |
 | 6 | Hard-to-review game (10 levels, 90 s each). | Medium | High | Cheat mode (skip level, invincibility, freeze, extra life, speed). |
-| 7 | Packaged build differs from the source version. | Medium | Medium | `make package` is reproducible from the repository; the built executable was started and found its assets and config. Re-test before each upload. |
+| 7 | The distributed version (Python source) does not run on a clean machine (missing Python or dependency). | Medium | Medium | Dependencies pinned in `pyproject.toml` / `uv.lock`; the run command is `uv sync && uv run python pac-man.py config.json`; test it on a clean Linux machine before the upload. |
 | 8 | Highscore file corrupted or unwritable. | Medium | Low | Tolerant reader, atomic writes, errors reported not raised. |
 | 9 | Not being able to explain AI-assisted code during the review. | High | Medium | README describes the AI usage; both members read and explain each module before the defense. |

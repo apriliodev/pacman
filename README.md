@@ -1,4 +1,4 @@
-*This activity has been created as part of the 42 curriculum by <login1>, <login2>.*
+*This activity has been created as part of the 42 curriculum by machapui, bdecourt.*
 
 # Pac-Man
 
@@ -8,7 +8,7 @@ A complete, playable Pac-Man written in Python 3.10+ with
 [pygame](https://www.pygame.org/). The goal of the activity is to build a
 game with a modular object-oriented architecture, a configurable ruleset, a
 persistent highscore table and mazes produced by an external package
-(*A-Maze-ing*), and to package it for a public gaming platform.
+(*A-Maze-ing*).
 
 Features:
 
@@ -26,17 +26,22 @@ Features:
 
 ### Installation
 
-```console
-$ make install        # pip install -r requirements-dev.txt
-```
+The project uses [uv](https://docs.astral.sh/uv/) (dependencies are declared
+in `pyproject.toml` and pinned in `uv.lock`):
 
-Only `pygame` is needed to play (`pip install -r requirements.txt`).
+```console
+$ make install        # uv sync: creates .venv with pygame, flake8, mypy
+```
 
 ### Run
 
 ```console
-$ python3 pac-man.py config.json      # or: make run
+$ make run                            # uv run python pac-man.py config.json
+$ uv run python pac-man.py config.json
 ```
+
+Without uv, `pip install pygame` then `python3 pac-man.py config.json` works
+too.
 
 The program takes exactly one argument: the configuration file. Any problem
 with that file (missing, invalid JSON, wrong values) is reported on stderr
@@ -70,29 +75,26 @@ Pressing `C` again turns the mode and all its effects off.
 
 | Target | Description |
 |---|---|
-| `make install` | Install the dependencies (game + dev tools) |
+| `make install` | `uv sync`: create the virtual environment with the dependencies |
 | `make run` | Run the game with `config.json` (`make run CONFIG=other.json`) |
 | `make debug` | Run the game under `pdb` |
-| `make clean` | Remove `__pycache__`, `.mypy_cache`, `.pytest_cache`, build output |
-| `make lint` | `flake8 .` and `mypy .` with the mandatory flags |
+| `make clean` | Remove `__pycache__`, `.mypy_cache`, `.pytest_cache` |
+| `make lint` | `flake8 .` and `mypy .` with the mandatory flags (run through uv) |
 | `make lint-strict` | `flake8 .` and `mypy . --strict` |
-| `make package` | Build the distributable with PyInstaller (`pac-man.spec`) |
 
-### Packaging
+### Distribution
 
-`make package` builds `dist/pac-man/` (executable, assets, a default
-`config.json` and `PLAYING.txt`, the in-package controls/options/config
-instructions) from `pac-man.spec` and `packaging_launcher.py`. The folder
-is zipped and uploaded to itch.io as a private/unlisted build, for example
-with [butler](https://itch.io/docs/butler/):
+The game is distributed as plain Python source (no executable): a zip of the
+files of this repository. A player needs [uv](https://docs.astral.sh/uv/)
+(which also downloads a suitable Python if needed) and runs:
 
 ```console
-$ butler push dist/pac-man <user>/<game>:windows
+$ uv sync
+$ uv run python pac-man.py config.json
 ```
 
-The packaged game needs no argument: it uses the `config.json` next to the
-executable (or the bundled one). Highscores are written next to the
-configuration file.
+`PLAYING.txt` explains the controls, the options and the configuration to
+players who do not have the README.
 
 ## Configuration
 
@@ -181,7 +183,6 @@ so that corridors loop, as Pac-Man needs.
 
 ```
 pac-man.py            entry point (argument parsing)
-packaging_launcher.py entry point of the packaged build
 pacgame/
   config.py           JSON-with-comments loader, validation, GameConfig
   highscores.py       top 10 storage (JSON)
@@ -215,12 +216,11 @@ decisions.
   [`dataclasses`](https://docs.python.org/3/library/dataclasses.html),
   [`typing`](https://docs.python.org/3/library/typing.html)
 - [flake8](https://flake8.pycqa.org/), [mypy](https://mypy.readthedocs.io/)
+- [uv documentation](https://docs.astral.sh/uv/)
 - [PEP 8](https://peps.python.org/pep-0008/),
   [PEP 257](https://peps.python.org/pep-0257/)
 - [The Pac-Man Dossier](https://pacman.holenet.info/) (original ghost
   behavior), breadth-first search (any algorithms textbook)
-- [PyInstaller](https://pyinstaller.org/),
-  [itch.io butler](https://itch.io/docs/butler/)
 
 ### Use of AI
 

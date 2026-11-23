@@ -1,4 +1,4 @@
-"""Game rules (``Session``) and the state machine (``Game``).
+"""Game rules (Session) and the screens / state machine (Game).
 
 States: menu, instructions, highscores, playing, paused, game_over, victory,
 name_entry.
@@ -38,7 +38,7 @@ class Outcome(Enum):
 
 @dataclass
 class CheatState:
-    """The cheat mode switches (used to ease peer review)."""
+    """Which cheats are on."""
 
     enabled: bool = False
     invincible: bool = False
@@ -49,19 +49,19 @@ class CheatState:
 class Session:
     """One game in progress: player, ghosts, level, timers and cheats.
 
-    Time is a counter of *played* milliseconds: it does not advance during
-    the pause, so every timer (level time, edible ghosts, respawn) is
-    naturally frozen while the game is paused.
+    The time is a counter of played milliseconds. It does not move during the
+    pause, so all the timers (level time, edible ghosts, respawn) are frozen
+    for free when the game is paused.
     """
 
     def __init__(self, config: GameConfig, renderer: Renderer,
                  maze: Maze) -> None:
-        """Start a new game on its first level.
+        """Start a new game on the first level.
 
         Args:
-            config: The game configuration.
-            renderer: Used to size the window for each maze.
-            maze: The maze of the first level.
+            config: the game config.
+            renderer: used to size the window for each maze.
+            maze: maze of the first level.
         """
         self.config = config
         self.renderer = renderer
@@ -76,8 +76,6 @@ class Session:
         self.ghosts = [
             Ghost(start, f"ghost_{number}.png", cell, config.ghost_speed)
             for number, start in enumerate(self.level.ghost_starts, 1)]
-
-    # -- information ------------------------------------------------------
 
     @property
     def time_left(self) -> int:
@@ -94,8 +92,6 @@ class Session:
             ("I", self.cheats.invincible), ("F", self.cheats.freeze),
             ("V", self.cheats.fast)) if active]
         return " ".join(["CHEAT"] + flags)
-
-    # -- input ------------------------------------------------------------
 
     def handle_key(self, key: int) -> None:
         """Handle a key press: cheat keys, then movement keys."""
@@ -128,17 +124,15 @@ class Session:
         else:
             self.player.speed = self.config.player_speed
 
-    # -- simulation -------------------------------------------------------
-
     def tick(self, elapsed_ms: int) -> None:
         """Advance the played-time counter."""
         self.now_ms += elapsed_ms
 
     def update(self) -> Outcome:
-        """Simulate one frame.
+        """Run one frame of the game.
 
         Returns:
-            Whether the game goes on, is lost or is won.
+            CONTINUE, GAME_OVER or VICTORY.
         """
         if self.time_left == 0:
             self.level_started_ms = self.now_ms
@@ -216,8 +210,6 @@ class Session:
             ghost.reset_position()
         self.level_started_ms = self.now_ms
 
-    # -- drawing ----------------------------------------------------------
-
     def draw(self) -> None:
         """Draw the maze, the pellets, the entities and the HUD."""
         self.renderer.draw_maze()
@@ -234,10 +226,10 @@ class Game:
     """The application: window, main loop and screens."""
 
     def __init__(self, config: GameConfig) -> None:
-        """Initialise pygame, the window and load the highscores.
+        """Start pygame, open the window and load the highscores.
 
         Args:
-            config: The game configuration.
+            config: the game config.
         """
         pygame.init()
         self.config = config
@@ -273,8 +265,6 @@ class Game:
             pygame.display.flip()
         pygame.quit()
 
-    # -- helpers ----------------------------------------------------------
-
     @staticmethod
     def _pressed(events: EventList) -> list[int]:
         """Return the keys pressed during this frame."""
@@ -285,8 +275,6 @@ class Game:
     def _is_enter(key: int) -> bool:
         """Tell whether a key is one of the Enter keys."""
         return key in (pygame.K_RETURN, pygame.K_KP_ENTER)
-
-    # -- screens ----------------------------------------------------------
 
     def _menu(self, events: EventList, elapsed: int) -> None:
         """Main menu: Start, Highscores, Instructions, Exit."""
@@ -439,13 +427,13 @@ class Game:
 
 
 def run_game(config: GameConfig) -> int:
-    """Run the game and turn unexpected failures into clean messages.
+    """Run the game, turn unexpected failures into a clean message.
 
     Args:
-        config: The game configuration.
+        config: the game config.
 
     Returns:
-        The process exit code (0 on success).
+        the exit code (0 if all went well).
     """
     try:
         Game(config).run()

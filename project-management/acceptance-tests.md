@@ -29,4 +29,4 @@ column is left empty on purpose.
 | 17 | Corrupted highscore file | Write garbage in `highscores.json` | Empty table, no crash | Auto | Pass |
 | 18 | Cheat mode | `C`, then `I F V L N` | Each effect works; HUD shows `CHEAT` and active letters; `C` again clears everything | Auto + manual | |
 | 19 | Lint | `make lint`, `make lint-strict` | No error | Auto | Pass |
-| 20 | Package | `make package`, start `dist/pac-man/pac-man.exe` | Game starts without arguments | Manual (build tested once) | |
+| 20 | Distribution | Unzip the repository files on a clean Linux machine, `uv sync`, `uv run python pac-man.py config.json` | Game starts | Manual | |

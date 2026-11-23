@@ -31,7 +31,7 @@ class Renderer:
         """Open the window.
 
         Args:
-            config: The game configuration (colors, window size).
+            config: the game config (colors, window size).
         """
         self.config = config
         self.screen = pygame.display.set_mode((MIN_WIDTH, MIN_HEIGHT))
@@ -47,16 +47,14 @@ class Renderer:
         self._pacgum_offset = 0.0
         self._super_offset = 0.0
 
-    # -- level preparation ------------------------------------------------
-
     def prepare_level(self, maze: Maze) -> int:
-        """Size the window for a maze and pre-render its walls.
+        """Resize the window for this maze and draw its walls once.
 
         Args:
-            maze: The maze grid of the level.
+            maze: the maze grid of the level.
 
         Returns:
-            The cell size in pixels.
+            the cell size in pixels.
         """
         rows, cols = len(maze), len(maze[0])
         available_w = self.config.window_width
@@ -103,8 +101,6 @@ class Renderer:
                     surface.fill(wall, (x, y, thick, cell))
         return surface
 
-    # -- gameplay drawing -------------------------------------------------
-
     def draw_maze(self) -> None:
         """Draw the pre-rendered maze."""
         self.play_area.blit(self._maze_surface, (0, 0))
@@ -134,8 +130,6 @@ class Renderer:
         if cheat_text:
             self.screen.blit(self.font.render(cheat_text, True, RED),
                              (470, 10))
-
-    # -- full-screen menus ------------------------------------------------
 
     def clear(self) -> None:
         """Fill the whole window with black."""

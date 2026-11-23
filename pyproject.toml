@@ -1,0 +1,18 @@
+[project]
+name = "pac-man"
+version = "1.0.0"
+description = "Pac-Man game written in Python with pygame"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pygame>=2.5",
+]
+
+[dependency-groups]
+dev = [
+    "flake8",
+    "mypy",
+]
+
+[tool.uv]
+package = false

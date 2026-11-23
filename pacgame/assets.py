@@ -9,19 +9,19 @@ ASSETS_DIR = ROOT_DIR / "assets"
 
 
 def load_image(name: str) -> pygame.Surface:
-    """Load an image from the assets directory.
+    """Load an image from the assets folder.
 
-    The display must already be initialised (``convert_alpha`` needs it).
+    Needs the display to be initialised already (because of convert_alpha).
 
     Args:
-        name: File name of the image inside the ``assets`` directory.
+        name: file name inside assets/.
 
     Returns:
-        The loaded surface, converted for fast blitting.
+        The image surface.
 
     Raises:
-        FileNotFoundError: If the image does not exist.
-        pygame.error: If the file cannot be decoded.
+        FileNotFoundError: if the file is missing.
+        pygame.error: if the file cannot be read as an image.
     """
     path = ASSETS_DIR / name
     if not path.is_file():

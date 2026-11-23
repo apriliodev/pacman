@@ -1,11 +1,11 @@
-"""Persistent highscore storage: the top 10 scores in a JSON file.
+"""Top 10 highscores saved in a JSON file.
 
 File format::
 
     [{"name": "Alice", "score": 1200}, {"name": "Bob", "score": 800}]
 
-Reading never raises: a missing, unreadable or corrupted file gives an empty
-list, and invalid entries are skipped.
+Reading never crashes: a missing or broken file gives an empty list and
+bad entries are skipped.
 """
 
 import json
@@ -32,35 +32,33 @@ def _warn(message: str) -> None:
 
 
 def is_allowed_char(char: str) -> bool:
-    """Tell whether ``char`` may appear in a player name.
+    """Check one character of a player name.
 
     Args:
-        char: A single character.
+        char: a single character.
 
     Returns:
-        True for ASCII letters, digits and the space character.
+        True for ASCII letters, digits and space.
     """
     return len(char) == 1 and char.isascii() and (
         char.isalnum() or char == " ")
 
 
 def is_valid_name(name: object) -> bool:
-    """Tell whether ``name`` is a valid player name.
-
-    A valid name has 1 to 10 characters: letters, digits and spaces only.
+    """Check a player name: 1 to 10 characters, letters, digits and spaces.
 
     Args:
-        name: Any value.
+        name: any value.
 
     Returns:
-        True if the name is acceptable.
+        True if the name is ok.
     """
     return (isinstance(name, str) and 0 < len(name) <= MAX_NAME_LENGTH
             and all(is_allowed_char(char) for char in name))
 
 
 def _is_valid_entry(entry: object) -> bool:
-    """Tell whether a parsed JSON value is a valid highscore entry."""
+    """Check one entry read from the file."""
     if not isinstance(entry, dict):
         return False
     score = entry.get("score")
@@ -70,19 +68,19 @@ def _is_valid_entry(entry: object) -> bool:
 
 
 def _sorted_top(entries: list[ScoreEntry]) -> list[ScoreEntry]:
-    """Sort entries by decreasing score and keep the best ones."""
+    """Best score first, keep the first 10."""
     ranked = sorted(entries, key=lambda entry: entry["score"], reverse=True)
     return ranked[:MAX_ENTRIES]
 
 
 def load_scores(path: Path) -> list[ScoreEntry]:
-    """Load the highscores, best first.
+    """Read the highscores, best first.
 
     Args:
-        path: The highscore JSON file.
+        path: the highscore JSON file.
 
     Returns:
-        At most 10 valid entries; an empty list if the file is missing or
+        10 valid entries at most, empty list if the file is missing or
         unusable.
     """
     if not path.exists():
@@ -103,22 +101,22 @@ def load_scores(path: Path) -> list[ScoreEntry]:
 
 
 def _clean_name(name: str) -> str:
-    """Make ``name`` valid: allowed characters only, 10 characters max."""
+    """Remove the forbidden characters and cut to 10 characters."""
     cleaned = "".join(c for c in name if is_allowed_char(c)).strip()
     cleaned = cleaned[:MAX_NAME_LENGTH].strip()
     return cleaned or DEFAULT_NAME
 
 
 def save_score(path: Path, name: str, score: int) -> list[ScoreEntry]:
-    """Add a score to the table and write it to disk.
+    """Add a score and write the table to disk.
 
     Args:
-        path: The highscore JSON file.
-        name: The player name (cleaned if needed).
-        score: The final score (negative values become 0).
+        path: the highscore JSON file.
+        name: player name (cleaned if needed).
+        score: final score (a negative one becomes 0).
 
     Returns:
-        The updated top 10, even if writing the file failed.
+        the new top 10, even if the file could not be written.
     """
     entries = load_scores(path)
     entries.append({"name": _clean_name(name), "score": max(0, int(score))})
